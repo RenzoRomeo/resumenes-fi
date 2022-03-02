@@ -1,0 +1,1 @@
+Aplicación para compartir resúmenes y demás documentos.
