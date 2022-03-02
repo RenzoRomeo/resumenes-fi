@@ -8,7 +8,7 @@ import {
 } from '@react-navigation/drawer';
 import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { NativeBaseProvider } from 'native-base';
-import { auth } from './src/firebase';
+import { auth, saveUser } from './src/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 import Home from './src/screens/Home';
@@ -17,6 +17,9 @@ import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
 
 import { signOut } from './src/firebase';
+import { useEffect } from 'react';
+import { serverTimestamp } from 'firebase/firestore';
+import Upload from './src/screens/Upload';
 
 const Drawer = createDrawerNavigator();
 
@@ -36,6 +39,16 @@ const CustomDrawerContent = ({ user, ...props }: CustomDrawerProps) => {
 export default function App() {
   const [user, loading, error] = useAuthState(auth);
 
+  useEffect(() => {
+    if (user && user.email) {
+      saveUser({
+        uid: user.uid,
+        lastSeen: serverTimestamp(),
+        email: user.email,
+      });
+    }
+  }, [user]);
+
   return (
     <NativeBaseProvider>
       <NavigationContainer>
@@ -50,6 +63,7 @@ export default function App() {
           {user ? (
             <>
               <Drawer.Screen name="Home" component={Home} />
+              <Drawer.Screen name="Upload" component={Upload} />
               <Drawer.Screen name="About" component={About} />
             </>
           ) : (

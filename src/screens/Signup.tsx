@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 import { Center, Input, Icon, Stack, Button } from 'native-base';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 const Signup = () => {
   const [email, setEmail] = useState<string>('');
@@ -34,9 +34,6 @@ const Signup = () => {
               onChangeText={(text) => {
                 setEmail(text);
               }}
-              InputLeftElement={
-                <Icon size="6" as={<AntDesign name="mail" />} ml={2} />
-              }
             />
             <Input
               placeholder="Password"
