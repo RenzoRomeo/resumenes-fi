@@ -17,11 +17,10 @@ const Upload = () => {
   const handleSendFile = () => {
     if (user && result && result.type !== 'cancel' && result.file) {
       const metadata = {
-        customMetaData: { uid: user.uid, subject },
+        customMetadata: { uid: user.uid, subject },
       };
-      savePDF(result.file, metadata).then((snapshot) => {
+      savePDF(result.file, metadata, user.uid).then((snapshot) => {
         console.log(`Uploaded '${result.name}'`);
-        console.log(snapshot.metadata);
       });
     }
   };

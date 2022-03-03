@@ -1,13 +1,18 @@
 import { initializeApp } from 'firebase/app';
-import { doc, getFirestore, setDoc } from 'firebase/firestore';
-import type { FieldValue } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import {
+  arrayUnion,
+  doc,
+  getFirestore,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import {
   getStorage,
   ref,
   uploadBytes,
   listAll,
-  getBytes,
+  getDownloadURL,
   StorageReference,
 } from 'firebase/storage';
 
@@ -25,25 +30,39 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
+const signUp = (email: string, password: string, data: any) => {
+  createUserWithEmailAndPassword(auth, email, password).then((res) =>
+    saveUser(res.user.uid, data)
+  );
+};
+
 const signOut = () => {
   auth.signOut();
 };
 
-type User = {
-  email: string;
-  lastSeen: FieldValue;
-  uid: string;
+const saveUser = async (uid: string, data: any) => {
+  await setDoc(doc(db, 'users', uid), data);
 };
 
-const saveUser = async (user: User) => {
-  await setDoc(doc(db, 'users', user.uid), {
-    email: user.email,
-    lastSeen: user.lastSeen,
+const updateUser = (uid: string, data: any) => {
+  const userRef = doc(db, 'users', uid);
+  try {
+    updateDoc(userRef, data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const addFileToUser = (uid: string, path: string) => {
+  const userRef = doc(db, 'users', uid);
+  updateDoc(userRef, {
+    files: arrayUnion(path),
   });
 };
 
-const savePDF = (file: File, metadata: any) => {
+const savePDF = (file: File, metadata: any, uid: string) => {
   const storageRef = ref(storage, `files/${file.name}`);
+  addFileToUser(uid, storageRef.fullPath);
   return uploadBytes(storageRef, file, metadata);
 };
 
@@ -53,7 +72,19 @@ const getAllFiles = () => {
 };
 
 const getFile = (ref: StorageReference) => {
-  return getBytes(ref);
+  const URL = getDownloadURL(ref);
+  return URL;
 };
 
-export { db, auth, storage, signOut, saveUser, savePDF, getAllFiles };
+export {
+  db,
+  auth,
+  storage,
+  signUp,
+  signOut,
+  saveUser,
+  updateUser,
+  savePDF,
+  getAllFiles,
+  getFile,
+};
