@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Button, Center, Text, Input } from 'native-base';
+import { Button, Stack, Text, Input } from 'native-base';
 import { useState } from 'react';
 import { DocumentResult, getDocumentAsync } from 'expo-document-picker';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -27,25 +27,19 @@ const Upload = () => {
 
   return (
     <View>
-      <Center w="100%" p={10}>
-        <Input
-          type="text"
-          value={subject}
-          onChangeText={(text) => setSubject(text)}
-        />
-        <Text
-          p={5}
-          borderWidth="1px"
-          mb={5}
-          borderRadius={5}
-          bg="blue.300"
-          fontSize={20}
-          fontWeight="bold"
-        >
+      <Stack w="100%" p={10} alignItems="center" space={5}>
+        <Text fontSize={40} fontWeight="bold">
           {result && result.type !== 'cancel'
             ? `File Selected: ${result!.name}`
             : 'Select a File'}
         </Text>
+        <Input
+          type="text"
+          placeholder="Subject"
+          value={subject}
+          onChangeText={(text) => setSubject(text)}
+          w="full"
+        />
         <Button onPress={handleLoadFile} w="100%">
           Load PDF
         </Button>
@@ -54,7 +48,7 @@ const Upload = () => {
             Upload File
           </Button>
         )}
-      </Center>
+      </Stack>
     </View>
   );
 };

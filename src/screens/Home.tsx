@@ -15,18 +15,13 @@ const Home = () => {
     });
   }, []);
 
-  const handleDownloadFile = (ref: StorageReference) => {
-    getFile(ref).then((res) => console.log(res));
-  };
-
   return (
     <View>
       <Center w="100%" p={10}>
         <FlatList
+          w="full"
           data={files}
-          renderItem={(file) => (
-            <FileItem handler={handleDownloadFile} item={file.item} />
-          )}
+          renderItem={(file) => <FileItem item={file.item} />}
           keyExtractor={(file) => file.name}
         />
       </Center>
