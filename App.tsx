@@ -38,13 +38,13 @@ const CustomDrawerContent = ({ user, ...props }: CustomDrawerProps) => {
 export default function App() {
   const [user, loading, error] = useAuthState(auth);
 
-  /* useEffect(() => {
-    if (user && user.email) {
+  useEffect(() => {
+    if (user) {
       updateUser(user.uid, {
         lastSeen: serverTimestamp(),
       });
     }
-  }, [user]); */
+  }, [user]);
 
   return (
     <NativeBaseProvider>
