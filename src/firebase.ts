@@ -1,22 +1,12 @@
 import { initializeApp } from 'firebase/app';
-import {
-  arrayUnion,
-  doc,
-  getDoc,
-  getFirestore,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import {
   getStorage,
   ref,
   uploadBytes,
-  listAll,
   getDownloadURL,
-  StorageReference,
-  getMetadata,
 } from 'firebase/storage';
+import { saveFile, saveUser } from './database';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDt9KI0I7kI5HN0dnIL73sc24Q2XCtfZ6E',
@@ -28,7 +18,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 
@@ -42,47 +31,17 @@ export const signOut = () => {
   auth.signOut();
 };
 
-export const saveUser = async (uid: string, data: any) => {
-  await setDoc(doc(db, 'users', uid), data);
-};
-
-export const updateUser = (uid: string, data: any) => {
-  const userRef = doc(db, 'users', uid);
+export const savePDF = async (file: File, uid: string, subject: string) => {
   try {
-    updateDoc(userRef, data);
-  } catch (err) {
-    console.error(err);
+    const storageRef = ref(storage, `files/${file.name}`);
+    const snapshot = await uploadBytes(storageRef, file);
+    await saveFile(uid, {
+      name: snapshot.ref.name,
+      uid,
+      subject,
+      url: await getDownloadURL(snapshot.ref),
+    });
+  } catch (error) {
+    console.error(error);
   }
-};
-
-export const addFileToUser = (uid: string, path: string) => {
-  const userRef = doc(db, 'users', uid);
-  updateDoc(userRef, {
-    files: arrayUnion(path),
-  });
-};
-
-export const savePDF = (file: File, metadata: any, uid: string) => {
-  const storageRef = ref(storage, `files/${file.name}`);
-  addFileToUser(uid, storageRef.fullPath);
-  return uploadBytes(storageRef, file, metadata);
-};
-
-export const getAllFiles = () => {
-  const filesRef = ref(storage, 'files');
-  return listAll(filesRef);
-};
-
-export const getFile = (ref: StorageReference) => {
-  const URL = getDownloadURL(ref);
-  return URL;
-};
-
-export const getFileMetadata = (ref: StorageReference) => {
-  return getMetadata(ref);
-};
-
-export const getUser = (uid: string) => {
-  const userRef = doc(db, 'users', uid);
-  return getDoc(userRef);
 };

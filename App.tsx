@@ -8,7 +8,7 @@ import {
 } from '@react-navigation/drawer';
 import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { NativeBaseProvider, Spinner, Center } from 'native-base';
-import { auth, saveUser, updateUser } from './src/firebase';
+import { auth } from './src/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect } from 'react';
 import { serverTimestamp } from 'firebase/firestore';
@@ -19,6 +19,7 @@ import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
 import Upload from './src/screens/Upload';
 import { signOut } from './src/firebase';
+import { saveUser, updateUser } from './src/database';
 
 const Drawer = createDrawerNavigator();
 
