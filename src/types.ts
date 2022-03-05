@@ -7,7 +7,7 @@ export interface UserDB {
   files?: string[];
 }
 
-export interface File {
+export interface FileDB {
   name: string;
   url: string;
   subject: string;

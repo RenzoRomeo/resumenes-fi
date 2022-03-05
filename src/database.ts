@@ -1,4 +1,4 @@
-import { UserDB, File } from './types';
+import { UserDB, FileDB } from './types';
 
 const BASE_URL = 'http://localhost:5000';
 
@@ -6,7 +6,11 @@ export const saveUser = async (uid: string, data: any) => {
   try {
     await fetch(`${BASE_URL}/users/new`, {
       method: 'POST',
-      body: JSON.stringify({ ...data, _id: uid, lastSeen: new Date().toISOString() }),
+      body: JSON.stringify({
+        ...data,
+        _id: uid,
+        lastSeen: new Date().toISOString(),
+      }),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -18,8 +22,8 @@ export const saveUser = async (uid: string, data: any) => {
 
 export const updateUser = async (uid: string, data: any) => {
   try {
-    await fetch(`${BASE_URL}/users/update/${uid}`, {
-      method: 'PUT',
+    await fetch(`${BASE_URL}/users/${uid}/update`, {
+      method: 'POST',
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
@@ -41,19 +45,18 @@ export const getUser = async (uid: string) => {
   }
 };
 
-export const saveFile = async (uid: string, data: File) => {
+export const saveFile = async (uid: string, data: FileDB) => {
   try {
-    const { id } = await fetch(`${BASE_URL}/files/new`, {
+    const { id: fileId } = await fetch(`${BASE_URL}/files/new`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
       },
     }).then((res) => res.json());
-
-    await fetch(`${BASE_URL}/users/addfile/${uid}`, {
-      method: 'PUT',
-      body: JSON.stringify({ id }),
+    await fetch(`${BASE_URL}/users/${uid}/addfile`, {
+      method: 'POST',
+      body: JSON.stringify({ fileId }),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -63,10 +66,35 @@ export const saveFile = async (uid: string, data: File) => {
   }
 };
 
+export const deleteFile = async (uid: string, fileId: string) => {
+  try {
+    await fetch(`${BASE_URL}/files/${fileId}`, {
+      method: 'DELETE',
+    });
+    await fetch(`${BASE_URL}/users/${uid}/deletefile`, {
+      method: 'POST',
+      body: JSON.stringify({ fileId }),
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const getAllFiles = async () => {
   try {
-    const files: File[] = await fetch(`${BASE_URL}/files`).then((res) =>
+    const files: FileDB[] = await fetch(`${BASE_URL}/files`).then((res) =>
       res.json()
+    );
+    return files;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getUserFiles = async (uid: string) => {
+  try {
+    const files: FileDB[] = await fetch(`${BASE_URL}/users/${uid}/files`).then(
+      (res) => res.json()
     );
     return files;
   } catch (error) {

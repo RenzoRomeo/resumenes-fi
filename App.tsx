@@ -19,6 +19,7 @@ import Upload from './src/screens/Upload';
 import { signOut } from './src/firebase';
 import { updateUser } from './src/database';
 import useUser from './src/hooks/useUser';
+import MyFiles from './src/screens/MyFiles';
 
 const Drawer = createDrawerNavigator();
 
@@ -48,35 +49,30 @@ export default function App() {
 
   return (
     <NativeBaseProvider>
-      {!user ? (
-        <Center h="full">
-          <Spinner size="lg" />
-        </Center>
-      ) : (
-        <NavigationContainer>
-          <Drawer.Navigator
-            drawerContent={(props) => (
-              <CustomDrawerContent
-                user={user !== null && user !== undefined}
-                {...props}
-              />
-            )}
-          >
-            {user ? (
-              <>
-                <Drawer.Screen name="Home" component={Home} />
-                <Drawer.Screen name="Upload" component={Upload} />
-                <Drawer.Screen name="About" component={About} />
-              </>
-            ) : (
-              <>
-                <Drawer.Screen name="Login" component={Login} />
-                <Drawer.Screen name="Signup" component={Signup} />
-              </>
-            )}
-          </Drawer.Navigator>
-        </NavigationContainer>
-      )}
+      <NavigationContainer>
+        <Drawer.Navigator
+          drawerContent={(props) => (
+            <CustomDrawerContent
+              user={user !== null && user !== undefined}
+              {...props}
+            />
+          )}
+        >
+          {user ? (
+            <>
+              <Drawer.Screen name="Home" component={Home} />
+              <Drawer.Screen name="Upload" component={Upload} />
+              <Drawer.Screen name="My Files" component={MyFiles} />
+              <Drawer.Screen name="About" component={About} />
+            </>
+          ) : (
+            <>
+              <Drawer.Screen name="Login" component={Login} />
+              <Drawer.Screen name="Signup" component={Signup} />
+            </>
+          )}
+        </Drawer.Navigator>
+      </NavigationContainer>
     </NativeBaseProvider>
   );
 }

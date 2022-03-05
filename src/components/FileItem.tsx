@@ -2,11 +2,11 @@ import { Linking, View } from 'react-native';
 import { Text, Stack, Spinner, Pressable, Badge } from 'native-base';
 import { useEffect, useState } from 'react';
 
-import type { File, UserDB } from '../types';
+import type { FileDB, UserDB } from '../types';
 import { getUser } from '../database';
 
 interface Props {
-  file: File;
+  file: FileDB;
 }
 
 const FileItem: React.FC<Props> = ({ file }) => {
