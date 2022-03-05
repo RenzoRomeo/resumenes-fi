@@ -1,4 +1,4 @@
-import { User, File } from './types';
+import { UserDB, File } from './types';
 
 const BASE_URL = 'http://localhost:5000';
 
@@ -32,7 +32,7 @@ export const updateUser = async (uid: string, data: any) => {
 
 export const getUser = async (uid: string) => {
   try {
-    const user: User = await fetch(`${BASE_URL}/users/${uid}`).then((res) =>
+    const user: UserDB = await fetch(`${BASE_URL}/users/${uid}`).then((res) =>
       res.json()
     );
     return user;

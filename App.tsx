@@ -8,8 +8,6 @@ import {
 } from '@react-navigation/drawer';
 import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { NativeBaseProvider, Spinner, Center } from 'native-base';
-import { auth } from './src/firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect } from 'react';
 import { serverTimestamp } from 'firebase/firestore';
 
@@ -19,7 +17,8 @@ import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
 import Upload from './src/screens/Upload';
 import { signOut } from './src/firebase';
-import { saveUser, updateUser } from './src/database';
+import { updateUser } from './src/database';
+import useUser from './src/hooks/useUser';
 
 const Drawer = createDrawerNavigator();
 
@@ -37,7 +36,7 @@ const CustomDrawerContent = ({ user, ...props }: CustomDrawerProps) => {
 };
 
 export default function App() {
-  const [user, loading] = useAuthState(auth);
+  const user = useUser();
 
   useEffect(() => {
     if (user) {
@@ -49,7 +48,7 @@ export default function App() {
 
   return (
     <NativeBaseProvider>
-      {loading ? (
+      {!user ? (
         <Center h="full">
           <Spinner size="lg" />
         </Center>

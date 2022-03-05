@@ -5,12 +5,11 @@ import { useEffect, useState } from 'react';
 import { getAllFiles, updateUser } from '../database';
 import FileItem from '../components/FileItem';
 import type { File } from '../types';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase';
+import useUser from '../hooks/useUser';
 
 const Home = () => {
   const [files, setFiles] = useState<File[]>();
-  const user = useAuthState(auth)[0];
+  const user = useUser();
 
   useEffect(() => {
     getAllFiles().then((res) => {
@@ -19,6 +18,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    console.log(user);
     if (user) updateUser(user.uid, { lastSeen: new Date().toISOString() });
   }, [user]);
 

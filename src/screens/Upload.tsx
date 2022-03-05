@@ -2,13 +2,13 @@ import { View } from 'react-native';
 import { Button, Stack, Text, Input } from 'native-base';
 import { useState } from 'react';
 import { DocumentResult, getDocumentAsync } from 'expo-document-picker';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, savePDF } from '../firebase';
+import { savePDF } from '../firebase';
+import useUser from '../hooks/useUser';
 
 const Upload = () => {
   const [result, setResult] = useState<DocumentResult>();
   const [subject, setSubject] = useState<string>('');
-  const user = useAuthState(auth)[0];
+  const user = useUser();
 
   const handleLoadFile = () => {
     getDocumentAsync({ type: 'application/pdf' }).then((res) => setResult(res));
