@@ -1,1 +1,3 @@
-Aplicación para compartir resúmenes y demás documentos.
+# TODO
+
+- Loading state on useUser hook
