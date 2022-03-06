@@ -10,10 +10,6 @@ interface Props {
   file: FileDB;
 }
 
-type Nav = {
-  navigate: (value: string) => void;
-};
-
 const MyFileItem: React.FC<Props> = ({ file }) => {
   const handlePress = () => {
     Linking.openURL(file.url);
