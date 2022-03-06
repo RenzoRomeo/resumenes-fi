@@ -11,8 +11,12 @@ interface Props {
 }
 
 const MyFileItem: React.FC<Props> = ({ file }) => {
-  const handlePress = () => {
-    Linking.openURL(file.url);
+  const handlePress = async () => {
+    try {
+      await Linking.openURL(file.url);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleDelete = async () => {

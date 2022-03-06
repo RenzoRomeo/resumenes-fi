@@ -2,6 +2,8 @@ import { View } from 'react-native';
 import { Button, Stack, Text, Input } from 'native-base';
 import { useState } from 'react';
 import { DocumentResult, getDocumentAsync } from 'expo-document-picker';
+import { useNavigation } from '@react-navigation/native';
+
 import { savePDF } from '../firebase';
 import useUser from '../hooks/useUser';
 
@@ -9,16 +11,25 @@ const Upload = () => {
   const [result, setResult] = useState<DocumentResult>();
   const [subject, setSubject] = useState<string>('');
   const [user] = useUser();
+  const navigation: { navigate: (arg0: string) => void } = useNavigation();
 
-  const handleLoadFile = () => {
-    getDocumentAsync({ type: 'application/pdf' }).then((res) => setResult(res));
+  const handleLoadFile = async () => {
+    try {
+      const res = await getDocumentAsync({ type: 'application/pdf' });
+      setResult(res);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleSendFile = () => {
+  const handleSendFile = async () => {
     if (user && result && result.type !== 'cancel' && result.file) {
-      savePDF(result.file, user.uid, subject).then(() => {
-        console.log(`Uploaded '${result.name}'`);
-      });
+      try {
+        await savePDF(result.file, user.uid, subject);
+        navigation.navigate('My Files');
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
