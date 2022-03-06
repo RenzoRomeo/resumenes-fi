@@ -50,7 +50,6 @@ export const savePDF = async (file: File, uid: string, subject: string) => {
 };
 
 export const deletePDF = async (path: string) => {
-  console.log('path', path);
   const storageRef = ref(storage, path);
   try {
     await deleteObject(storageRef);
