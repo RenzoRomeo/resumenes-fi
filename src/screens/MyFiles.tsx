@@ -9,7 +9,7 @@ import useUser from '../hooks/useUser';
 
 const MyFiles = () => {
   const [files, setFiles] = useState<FileDB[]>();
-  const user = useUser();
+  const [user] = useUser();
 
   useEffect(() => {
     if (user) getUserFiles(user.uid).then((res) => setFiles(res));

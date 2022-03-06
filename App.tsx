@@ -37,7 +37,7 @@ const CustomDrawerContent = ({ user, ...props }: CustomDrawerProps) => {
 };
 
 export default function App() {
-  const user = useUser();
+  const [user, loading] = useUser();
 
   useEffect(() => {
     if (user) {
@@ -49,30 +49,36 @@ export default function App() {
 
   return (
     <NativeBaseProvider>
-      <NavigationContainer>
-        <Drawer.Navigator
-          drawerContent={(props) => (
-            <CustomDrawerContent
-              user={user !== null && user !== undefined}
-              {...props}
-            />
-          )}
-        >
-          {user ? (
-            <>
-              <Drawer.Screen name="Home" component={Home} />
-              <Drawer.Screen name="Upload" component={Upload} />
-              <Drawer.Screen name="My Files" component={MyFiles} />
-              <Drawer.Screen name="About" component={About} />
-            </>
-          ) : (
-            <>
-              <Drawer.Screen name="Login" component={Login} />
-              <Drawer.Screen name="Signup" component={Signup} />
-            </>
-          )}
-        </Drawer.Navigator>
-      </NavigationContainer>
+      {loading ? (
+        <Center h="100%">
+          <Spinner size="lg" />
+        </Center>
+      ) : (
+        <NavigationContainer>
+          <Drawer.Navigator
+            drawerContent={(props) => (
+              <CustomDrawerContent
+                user={user !== null && user !== undefined}
+                {...props}
+              />
+            )}
+          >
+            {user ? (
+              <>
+                <Drawer.Screen name="Home" component={Home} />
+                <Drawer.Screen name="Upload" component={Upload} />
+                <Drawer.Screen name="My Files" component={MyFiles} />
+                <Drawer.Screen name="About" component={About} />
+              </>
+            ) : (
+              <>
+                <Drawer.Screen name="Login" component={Login} />
+                <Drawer.Screen name="Signup" component={Signup} />
+              </>
+            )}
+          </Drawer.Navigator>
+        </NavigationContainer>
+      )}
     </NativeBaseProvider>
   );
 }
