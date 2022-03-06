@@ -53,19 +53,27 @@ export const deleteFile = async (uid: string, fileId: string) => {
   }
 };
 
-export const getAllFiles = async () => {
+export const getAllFiles = async (page = 1, limit = 10) => {
   try {
-    const { data: files } = await axios.get(`${BASE_URL}/files`);
-    return files as FileDB[];
+    const {
+      data: { docs: files, hasNextPage },
+    } = await axios.get(`${BASE_URL}/files`, {
+      params: { page, limit },
+    });
+    return { files, hasNextPage } as { files: FileDB[]; hasNextPage: boolean };
   } catch (error) {
     console.error(error);
   }
 };
 
-export const getUserFiles = async (uid: string) => {
+export const getUserFiles = async (uid: string, page = 1, limit = 10) => {
   try {
-    const { data: files } = await axios.get(`${BASE_URL}/users/${uid}/files`);
-    return files as FileDB[];
+    const {
+      data: { docs: files, hasNextPage },
+    } = await axios.get(`${BASE_URL}/users/${uid}/files`, {
+      params: { page, limit },
+    });
+    return { files, hasNextPage } as { files: FileDB[]; hasNextPage: boolean };
   } catch (error) {
     console.error(error);
   }
