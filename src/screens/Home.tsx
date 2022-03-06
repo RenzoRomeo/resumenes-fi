@@ -1,25 +1,20 @@
 import { View } from 'react-native';
 import { Center, FlatList } from 'native-base';
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 
-import { getAllFiles, updateUser } from '../database';
+import { getAllFiles } from '../database';
 import FileItem from '../components/FileItem';
 import type { FileDB } from '../types';
-import useUser from '../hooks/useUser';
 
 const Home = () => {
   const [files, setFiles] = useState<FileDB[]>();
-  const [user] = useUser();
 
-  useEffect(() => {
-    getAllFiles().then((res) => {
-      setFiles(res);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (user) updateUser(user.uid, { lastSeen: new Date().toISOString() });
-  }, [user]);
+  useFocusEffect(
+    useCallback(() => {
+      getAllFiles().then((res) => setFiles(res));
+    }, [])
+  );
 
   return (
     <View>
