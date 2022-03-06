@@ -9,7 +9,7 @@ export const saveUser = async (uid: string, data: any) => {
     await axios.post(`${BASE_URL}/users/new`, {
       ...data,
       _id: uid,
-      lastSeen: new Date().toISOString(),
+      lastSeen: new Date(),
     });
   } catch (error) {
     console.error(error);

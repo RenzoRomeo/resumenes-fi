@@ -9,7 +9,6 @@ import {
 import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { NativeBaseProvider, Spinner, Center } from 'native-base';
 import { useEffect } from 'react';
-import { serverTimestamp } from 'firebase/firestore';
 
 import Home from './src/screens/Home';
 import About from './src/screens/About';
@@ -42,7 +41,7 @@ export default function App() {
   useEffect(() => {
     if (user) {
       updateUser(user.uid, {
-        lastSeen: serverTimestamp(),
+        lastSeen: new Date(),
       });
     }
   }, [user]);

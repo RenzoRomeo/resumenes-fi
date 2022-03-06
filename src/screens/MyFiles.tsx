@@ -10,13 +10,18 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const MyFiles = () => {
   const [files, setFiles] = useState<FileDB[]>();
+  const [flag, setFlag] = useState<boolean>(false);
   const [user] = useUser();
 
   useFocusEffect(
     useCallback(() => {
       if (user) getUserFiles(user.uid).then((res) => setFiles(res));
-    }, [user])
+    }, [user, flag])
   );
+
+  const handleReload = () => {
+    setFlag(!flag);
+  };
 
   return (
     <View>
@@ -24,7 +29,9 @@ const MyFiles = () => {
         <FlatList
           w="full"
           data={files}
-          renderItem={({ item }) => <MyFileItem file={item} />}
+          renderItem={({ item }) => (
+            <MyFileItem file={item} handleReload={handleReload} />
+          )}
           keyExtractor={(file) => file.name}
         />
       </Center>

@@ -8,9 +8,10 @@ import { deletePDF } from '../firebase';
 
 interface Props {
   file: FileDB;
+  handleReload: () => void;
 }
 
-const MyFileItem: React.FC<Props> = ({ file }) => {
+const MyFileItem: React.FC<Props> = ({ file, handleReload }) => {
   const handlePress = async () => {
     try {
       await Linking.openURL(file.url);
@@ -21,6 +22,7 @@ const MyFileItem: React.FC<Props> = ({ file }) => {
 
   const handleDelete = async () => {
     try {
+      handleReload();
       await deleteFile(file.uid, file._id);
       await deletePDF(file.path);
     } catch (error) {
