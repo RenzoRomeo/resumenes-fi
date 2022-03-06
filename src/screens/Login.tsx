@@ -48,7 +48,7 @@ const Login = () => {
                   size="6"
                   mr={2}
                   as={<Ionicons name={showPass ? 'eye' : 'eye-off'} />}
-                  onTouchEnd={() => {
+                  onPress={() => {
                     setShowPass(!showPass);
                   }}
                 />
