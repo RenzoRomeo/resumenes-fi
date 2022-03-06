@@ -1,22 +1,43 @@
 import { View, Linking } from 'react-native';
-import { Text, Pressable, Stack, Badge } from 'native-base';
+import { Text, Pressable, Stack, Badge, IconButton, Icon } from 'native-base';
+import { Feather } from '@expo/vector-icons';
 
 import { FileDB } from '../types';
-import { useEffect } from 'react';
+import { deleteFile } from '../database';
 
 interface Props {
   file: FileDB;
 }
+
+type Nav = {
+  navigate: (value: string) => void;
+};
 
 const MyFileItem: React.FC<Props> = ({ file }) => {
   const handlePress = () => {
     Linking.openURL(file.url);
   };
 
+  const handleDelete = async () => {
+    try {
+      await deleteFile(file.uid, file._id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <View>
       <Pressable onPress={handlePress}>
-        <Stack borderWidth={1} borderRadius={5} p={5} my={2} direction="row">
+        <Stack
+          borderWidth={1}
+          borderRadius={5}
+          p={5}
+          my={2}
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+        >
           <Stack>
             <Text fontSize={20} fontWeight="bold">
               {file.name}
@@ -25,7 +46,11 @@ const MyFileItem: React.FC<Props> = ({ file }) => {
               {file.subject}
             </Badge>
           </Stack>
-          <Text>DELETE</Text>
+          <IconButton
+            bg="red.400"
+            onPress={handleDelete}
+            icon={<Icon as={<Feather name="trash-2" color="black" />} />}
+          />
         </Stack>
       </Pressable>
     </View>

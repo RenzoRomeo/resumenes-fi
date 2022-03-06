@@ -18,7 +18,6 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    console.log(user);
     if (user) updateUser(user.uid, { lastSeen: new Date().toISOString() });
   }, [user]);
 

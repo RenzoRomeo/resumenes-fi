@@ -1,3 +1,4 @@
+import { deletePDF } from './firebase';
 import { UserDB, FileDB } from './types';
 
 const BASE_URL = 'http://localhost:5000';
@@ -45,7 +46,7 @@ export const getUser = async (uid: string) => {
   }
 };
 
-export const saveFile = async (uid: string, data: FileDB) => {
+export const saveFile = async (uid: string, data: any) => {
   try {
     const { id: fileId } = await fetch(`${BASE_URL}/files/new`, {
       method: 'POST',
@@ -68,12 +69,16 @@ export const saveFile = async (uid: string, data: FileDB) => {
 
 export const deleteFile = async (uid: string, fileId: string) => {
   try {
-    await fetch(`${BASE_URL}/files/${fileId}`, {
+    const { path } = await fetch(`${BASE_URL}/files/${fileId}`, {
       method: 'DELETE',
-    });
+    }).then((res) => res.json());
+    await deletePDF(path);
     await fetch(`${BASE_URL}/users/${uid}/deletefile`, {
       method: 'POST',
       body: JSON.stringify({ fileId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   } catch (error) {
     console.error(error);

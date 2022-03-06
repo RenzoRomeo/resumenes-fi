@@ -5,7 +5,9 @@ import {
   ref,
   uploadBytes,
   getDownloadURL,
+  deleteObject,
 } from 'firebase/storage';
+
 import { saveFile, saveUser } from './database';
 
 const firebaseConfig = {
@@ -40,7 +42,18 @@ export const savePDF = async (file: File, uid: string, subject: string) => {
       uid,
       subject,
       url: await getDownloadURL(snapshot.ref),
+      path: snapshot.ref.fullPath,
     });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deletePDF = async (path: string) => {
+  console.log('path', path);
+  const storageRef = ref(storage, path);
+  try {
+    await deleteObject(storageRef);
   } catch (error) {
     console.error(error);
   }

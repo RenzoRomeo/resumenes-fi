@@ -4,18 +4,18 @@ import type { User } from 'firebase/auth';
 
 import { auth } from '../firebase';
 
-const useUser = (): [User | undefined, boolean] => {
-  const [user, setUser] = useState<User>();
+const useUser = (): [User | undefined | null, boolean] => {
+  const [user, setUser] = useState<User | null>();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user) setUser(user);
+      setUser(user);
     });
   }, []);
 
   useEffect(() => {
-    if (user !== undefined) setLoading(false);
+    if (user === null || user !== undefined) setLoading(false);
   }, [user]);
 
   return [user, loading];
