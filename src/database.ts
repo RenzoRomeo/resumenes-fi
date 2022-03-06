@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-import { deletePDF } from './firebase';
 import { UserDB, FileDB } from './types';
 
 const BASE_URL = 'http://localhost:5000';
