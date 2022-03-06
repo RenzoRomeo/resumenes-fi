@@ -28,7 +28,7 @@ export const updateUser = async (uid: string, data: any) => {
 export const getUser = async (uid: string) => {
   try {
     const { data: user } = await axios.get(`${BASE_URL}/users/${uid}`);
-    return user;
+    return user as UserDB;
   } catch (error) {
     console.error(error);
   }
@@ -60,7 +60,7 @@ export const deleteFile = async (uid: string, fileId: string) => {
 export const getAllFiles = async () => {
   try {
     const { data: files } = await axios.get(`${BASE_URL}/files`);
-    return files;
+    return files as FileDB[];
   } catch (error) {
     console.error(error);
   }
@@ -69,7 +69,7 @@ export const getAllFiles = async () => {
 export const getUserFiles = async (uid: string) => {
   try {
     const { data: files } = await axios.get(`${BASE_URL}/users/${uid}/files`);
-    return files;
+    return files as FileDB[];
   } catch (error) {
     console.error(error);
   }
