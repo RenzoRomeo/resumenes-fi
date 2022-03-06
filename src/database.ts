@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import { deletePDF } from './firebase';
 import { UserDB, FileDB } from './types';
 
@@ -5,16 +7,10 @@ const BASE_URL = 'http://localhost:5000';
 
 export const saveUser = async (uid: string, data: any) => {
   try {
-    await fetch(`${BASE_URL}/users/new`, {
-      method: 'POST',
-      body: JSON.stringify({
-        ...data,
-        _id: uid,
-        lastSeen: new Date().toISOString(),
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    await axios.post(`${BASE_URL}/users/new`, {
+      ...data,
+      _id: uid,
+      lastSeen: new Date().toISOString(),
     });
   } catch (error) {
     console.error(error);
@@ -23,13 +19,7 @@ export const saveUser = async (uid: string, data: any) => {
 
 export const updateUser = async (uid: string, data: any) => {
   try {
-    await fetch(`${BASE_URL}/users/${uid}/update`, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    await axios.post(`${BASE_URL}/users/${uid}/update`, data);
   } catch (error) {
     console.error(error);
   }
@@ -37,9 +27,7 @@ export const updateUser = async (uid: string, data: any) => {
 
 export const getUser = async (uid: string) => {
   try {
-    const user: UserDB = await fetch(`${BASE_URL}/users/${uid}`).then((res) =>
-      res.json()
-    );
+    const { data: user } = await axios.get(`${BASE_URL}/users/${uid}`);
     return user;
   } catch (error) {
     console.error(error);
@@ -48,20 +36,10 @@ export const getUser = async (uid: string) => {
 
 export const saveFile = async (uid: string, data: any) => {
   try {
-    const { id: fileId } = await fetch(`${BASE_URL}/files/new`, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then((res) => res.json());
-    await fetch(`${BASE_URL}/users/${uid}/addfile`, {
-      method: 'POST',
-      body: JSON.stringify({ fileId }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const {
+      data: { id: fileId },
+    } = await axios.post(`${BASE_URL}/files/new`, data);
+    await axios.post(`${BASE_URL}/users/${uid}/addfile`, { fileId });
   } catch (error) {
     console.error(error);
   }
@@ -69,17 +47,11 @@ export const saveFile = async (uid: string, data: any) => {
 
 export const deleteFile = async (uid: string, fileId: string) => {
   try {
-    const { path } = await fetch(`${BASE_URL}/files/${fileId}`, {
-      method: 'DELETE',
-    }).then((res) => res.json());
+    const {
+      data: { path },
+    } = await axios.delete(`${BASE_URL}/files/${fileId}`);
     await deletePDF(path);
-    await fetch(`${BASE_URL}/users/${uid}/deletefile`, {
-      method: 'POST',
-      body: JSON.stringify({ fileId }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    await axios.post(`${BASE_URL}/users/${uid}/deletefile`, { fileId });
   } catch (error) {
     console.error(error);
   }
@@ -87,9 +59,7 @@ export const deleteFile = async (uid: string, fileId: string) => {
 
 export const getAllFiles = async () => {
   try {
-    const files: FileDB[] = await fetch(`${BASE_URL}/files`).then((res) =>
-      res.json()
-    );
+    const { data: files } = await axios.get(`${BASE_URL}/files`);
     return files;
   } catch (error) {
     console.error(error);
@@ -98,9 +68,7 @@ export const getAllFiles = async () => {
 
 export const getUserFiles = async (uid: string) => {
   try {
-    const files: FileDB[] = await fetch(`${BASE_URL}/users/${uid}/files`).then(
-      (res) => res.json()
-    );
+    const { data: files } = await axios.get(`${BASE_URL}/users/${uid}/files`);
     return files;
   } catch (error) {
     console.error(error);
