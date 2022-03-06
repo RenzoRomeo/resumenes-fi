@@ -8,7 +8,7 @@ import useUser from '../hooks/useUser';
 const Upload = () => {
   const [result, setResult] = useState<DocumentResult>();
   const [subject, setSubject] = useState<string>('');
-  const user = useUser();
+  const [user] = useUser();
 
   const handleLoadFile = () => {
     getDocumentAsync({ type: 'application/pdf' }).then((res) => setResult(res));
