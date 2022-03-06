@@ -4,6 +4,7 @@ import { Feather } from '@expo/vector-icons';
 
 import { FileDB } from '../types';
 import { deleteFile } from '../database';
+import { deletePDF } from '../firebase';
 
 interface Props {
   file: FileDB;
@@ -21,6 +22,7 @@ const MyFileItem: React.FC<Props> = ({ file }) => {
   const handleDelete = async () => {
     try {
       await deleteFile(file.uid, file._id);
+      await deletePDF(file.path);
     } catch (error) {
       console.error(error);
     }

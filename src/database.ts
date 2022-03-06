@@ -47,10 +47,7 @@ export const saveFile = async (uid: string, data: any) => {
 
 export const deleteFile = async (uid: string, fileId: string) => {
   try {
-    const {
-      data: { path },
-    } = await axios.delete(`${BASE_URL}/files/${fileId}`);
-    await deletePDF(path);
+    await axios.delete(`${BASE_URL}/files/${fileId}`);
     await axios.post(`${BASE_URL}/users/${uid}/deletefile`, { fileId });
   } catch (error) {
     console.error(error);
