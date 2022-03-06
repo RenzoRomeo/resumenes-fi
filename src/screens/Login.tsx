@@ -1,9 +1,10 @@
 import { View, Text } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 import { Center, Stack, Input, Button, Icon } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -19,6 +20,14 @@ const Login = () => {
   useEffect(() => {
     if (error) alert(error.message);
   }, [error]);
+
+  useFocusEffect(
+    useCallback(() => {
+      setEmail('');
+      setPassword('');
+      setShowPass(false);
+    }, [])
+  );
 
   return (
     <View>

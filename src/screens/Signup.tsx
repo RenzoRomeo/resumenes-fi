@@ -1,8 +1,9 @@
 import { View } from 'react-native';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { signUp } from '../firebase';
 import { Center, Input, Icon, Stack, Button } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Signup = () => {
   const [email, setEmail] = useState<string>('');
@@ -14,6 +15,16 @@ const Signup = () => {
   const createUser = () => {
     signUp(email, password, { email, name, lastName });
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      setEmail('');
+      setPassword('');
+      setName('');
+      setLastName('');
+      setShowPass(false);
+    }, [])
+  );
 
   return (
     <View>
