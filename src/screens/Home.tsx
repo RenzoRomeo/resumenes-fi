@@ -5,7 +5,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import { getAllFiles } from '../database';
 import FileItem from '../components/FileItem';
-import type { FileDB } from '../types';
+import type { FileDB } from '../utils/types';
 
 const Home = () => {
   const [files, setFiles] = useState<FileDB[]>([]);

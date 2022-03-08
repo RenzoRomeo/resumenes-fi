@@ -2,7 +2,7 @@ import { Linking, View } from 'react-native';
 import { Text, Stack, Spinner, Pressable, Badge } from 'native-base';
 import { useEffect, useState } from 'react';
 
-import type { FileDB, UserDB } from '../types';
+import type { FileDB, UserDB } from '../utils/types';
 import { getUser } from '../database';
 
 interface Props {

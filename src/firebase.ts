@@ -23,10 +23,17 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 
-export const signUp = (email: string, password: string, data: any) => {
-  createUserWithEmailAndPassword(auth, email, password).then((res) =>
-    saveUser(res.user.uid, data)
-  );
+export const signUp = async (email: string, password: string, data: any) => {
+  try {
+    const { user } = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    saveUser(user.uid, data);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const signOut = () => {

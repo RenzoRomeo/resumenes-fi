@@ -1,16 +1,19 @@
 import axios from 'axios';
 
-import { UserDB, FileDB } from './types';
+import { UserDB, FileDB } from './utils/types';
 
 const BASE_URL = 'http://localhost:5000';
 
 export const saveUser = async (uid: string, data: any) => {
   try {
-    await axios.post(`${BASE_URL}/users/new`, {
-      ...data,
-      _id: uid,
-      lastSeen: new Date(),
-    });
+    await axios.post(
+      `${BASE_URL}/users/new`,
+      {
+        ...data,
+        _id: uid,
+        lastSeen: new Date(),
+      }
+    );
   } catch (error) {
     console.error(error);
   }

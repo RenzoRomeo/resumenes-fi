@@ -19,6 +19,7 @@ import { signOut } from './src/firebase';
 import { updateUser } from './src/database';
 import useUser from './src/hooks/useUser';
 import MyFiles from './src/screens/MyFiles';
+import axios from 'axios';
 
 const Drawer = createDrawerNavigator();
 
@@ -40,9 +41,14 @@ export default function App() {
 
   useEffect(() => {
     if (user) {
-      updateUser(user.uid, {
-        lastSeen: new Date(),
-      });
+      const authorize = async () => {
+        const token = await user.getIdToken();
+        axios.defaults.headers.common.authorization = `Bearer ${token}`;
+        updateUser(user.uid, {
+          lastSeen: new Date(),
+        });
+      };
+      authorize();
     }
   }, [user]);
 

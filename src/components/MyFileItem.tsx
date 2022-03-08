@@ -2,7 +2,7 @@ import { View, Linking } from 'react-native';
 import { Text, Pressable, Stack, Badge, IconButton, Icon } from 'native-base';
 import { Feather } from '@expo/vector-icons';
 
-import { FileDB } from '../types';
+import { FileDB } from '../utils/types';
 import { deleteFile } from '../database';
 import { deletePDF } from '../firebase';
 
