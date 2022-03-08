@@ -1,8 +1,8 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { useCallback, useEffect, useState } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
-import { Center, Stack, Input, Button, Icon } from 'native-base';
+import { Center, Stack, Input, Button, Icon, Spinner } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -31,7 +31,11 @@ const Login = () => {
 
   return (
     <View>
-      {loading && <Text>Loading...</Text>}
+      {loading && (
+        <Center h="full" w="full">
+          <Spinner size="lg" />
+        </Center>
+      )}
       {!loading && !user && (
         <Center w="full" alignItems="center" px="10px" mt={10}>
           <Stack w="60%" maxW="300px" space={5}>
